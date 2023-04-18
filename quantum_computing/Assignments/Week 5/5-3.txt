@@ -1,0 +1,26 @@
+from qiskit import QuantumCircuit
+import numpy as np
+
+
+def phase_oracle(uf, n, phi):
+    """
+    Phose orcle implementation
+    :param uf: quantum circuit on n+1 qubits implementing f:{0,1}^n-->{0,1}
+    :param n: Cardinality of input.
+    :param phi: Phase of the oracle
+    :return: QuantumCircuit implementing the phase Oracle.
+    """
+    qc = QuantumCircuit(n + 1)
+
+    # BEGIN SOLUTION
+    if phi == np.pi:
+        qc.x(n)
+        qc.h(n)
+        qc = qc + uf
+        qc.h(n)
+        qc.x(n)
+    else:
+        qc = qc + uf
+        qc.u1(phi, n)
+        qc = qc + uf
+    return qc

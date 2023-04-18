@@ -1,0 +1,11 @@
+from qiskit.quantum_info import Statevector
+import numpy as np
+from qiskit import *
+
+def mygate():
+    q = QuantumRegister(1) 
+    qc = QuantumCircuit(q)
+    qc.rz(np.pi,q)
+    qc.ry(np.pi/2,q)
+    qc.rz(np.pi/4,q)
+    return qc

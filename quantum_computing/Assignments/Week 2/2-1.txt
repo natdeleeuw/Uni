@@ -1,0 +1,13 @@
+import numpy as np
+from qiskit import *
+from decorators import *
+
+
+def prepare_state():  # Create QC
+    q = QuantumRegister(1)
+    qc = QuantumCircuit(q)  # create circuit
+
+    # BEGIN SOLUTION
+    qc.h(q)
+
+    return qc

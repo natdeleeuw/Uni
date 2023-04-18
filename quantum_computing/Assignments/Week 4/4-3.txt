@@ -1,0 +1,13 @@
+import numpy as np
+from qiskit import *
+from decorators import *
+
+
+def half_adder():
+    q = QuantumRegister(3)
+    qc = QuantumCircuit(q)
+
+    # BEGIN SOLUTION
+    qc.ccx(*range(3))
+    qc.cx(*range(2))
+    return qc

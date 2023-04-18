@@ -1,0 +1,19 @@
+import numpy as np
+from qiskit import *
+from qiskit.quantum_info import Statevector
+
+
+def orthogonal_state(statevector):
+    # get the coefficients of |0> and |1>
+    coef0 = statevector.data[0]
+    coef1 = statevector.data[1]
+
+    # BEGIN SOLUTION
+
+    # Use the fact that we rely on the complex conjugate
+    # during computation. Hence the braket results in -ab + ab = 0
+    # Regardless of the values of a and b
+    a = - np.conj(coef1)
+    b = np.conj(coef0)
+
+    return Statevector([a, b])

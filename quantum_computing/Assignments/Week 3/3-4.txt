@@ -1,0 +1,15 @@
+import numpy as np
+from qiskit import *
+from decorators import *
+
+
+def ct_gate():
+    q = QuantumRegister(2)
+    qc = QuantumCircuit(q)
+
+    # BEGIN SOLUTION
+    qc.cx(1, 0)
+    qc.rz(-np.pi / 8, 0)
+    qc.cx(1, 0)
+    qc.rz(np.pi / 8, 0)
+    return qc

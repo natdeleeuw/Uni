@@ -1,0 +1,37 @@
+from qiskit.quantum_info import Statevector
+import numpy as np
+from qiskit import *
+
+def own_cx(qc, control, target):
+    """
+    Implement cx by compiling cp sandwiched by 2 hadamard gates.
+    """
+    qc.h(target)
+    qc.cp(np.pi, control, target)
+    qc.h(target)
+
+def own_swap(qc, idx1, idx2):
+    """
+    Implement swap with 3 cx's.
+    """
+    own_cx(qc, idx1, idx2)
+    own_cx(qc, idx2, idx1)
+    own_cx(qc, idx1, idx2)
+    
+def qftlike_gate():
+    q = QuantumRegister(3) 
+    qc = QuantumCircuit(q)
+ 
+    # create |x_1> |x_2> |x_0> by swapping 1 with 2
+    own_swap(qc,1,2) 
+    
+    # create (|0>+w_2^x^0|1>)/sqrt(2) on qubit 0
+    qc.h(0)
+    # create (|0>+w_2^x^2|1>)/sqrt(2) on qubit 1
+    qc.h(1)
+    
+    # add the phases controlled on x_1
+    qc.cp(np.pi/2**1, 2, 1)    
+    qc.cp(np.pi/2**2, 2, 0)
+    
+    return qc

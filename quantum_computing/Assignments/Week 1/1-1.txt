@@ -1,0 +1,14 @@
+import numpy as np
+from qiskit import *
+from qiskit.quantum_info import Statevector
+
+
+def prepare_statevector(x):
+
+    # BEGIN SOLUTION
+    # Create initial state vector. Probability of measuring |0> should be x, hence take the sqrt(x) and sqrt(1-x) to construct the state.
+    initial_state = np.sqrt([x, 1 - x])
+
+    # Create the statevector object using the initial_state.
+    sv = Statevector(initial_state)
+    return sv           # Return the correct statevector

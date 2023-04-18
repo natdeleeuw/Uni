@@ -1,0 +1,103 @@
+import numpy as np
+from qiskit import *
+
+
+def bloch_coordinates(statevector):
+    # get the coefficients of |0> and |1>
+    coef0 = statevector.data[0]
+    coef1 = statevector.data[1]
+
+    # BEGIN SOLUTION
+    EPSILON = 1e-6
+
+    """
+        Solution without trig
+        """
+    a = np.sqrt(np.real(coef0 * coef0.conjugate()))
+    if abs(a) < EPSILON:
+        b = 1
+    else:
+        b = coef0.conjugate() * coef1 / a
+
+    br = b.real
+    bi = b.imag
+
+    z = 2 * a ** 2 - 1
+    x = 2 * a * br
+    y = 2 * a * bi
+
+    """
+        Solution with trig
+        """
+    abs_a0 = np.abs(coef0)
+    abs_a1 = np.abs(coef1)
+    radius = np.sqrt(abs_a0 ** 2 + abs_a1 ** 2)
+    phase_a0 = np.angle(coef0)
+    phase_a1 = np.angle(coef1)
+
+    phi = (phase_a1 - phase_a0)
+    # e^(j * (t - phi / 2)) e^(j * (t + phi / 2)) => (t - phi/2) + (t + phi/2) = 2t
+    global_phase = 0.5 * (phase_a0 + phase_a1)
+    theta = 2 * np.arccos(np.exp(1j * (phi / 2 - global_phase)) * coef0)
+    z = (radius * np.cos(theta)).real
+    x = (radius * np.sin(theta) * np.cos(phi)).real
+    y = (radius * np.sin(theta) * np.sin(phi)).real
+
+    return [x, y, z]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def bloch_coordinates(statevector):
+    
+    # get the coefficients of |0> and |1>
+    coef0 = statevector.data[0]
+    coef1 = statevector.data[1]
+    
+    EPSILON = 1e-6
+
+    # the coordinates should be gotten from theta, phi and from the radius
+    
+    # remove imaginary part from alpha and beta and calculate radius (magnitude)
+    real_alpha = np.abs(coef0)
+    real_beta = np.abs(coef1)
+    radius = np.sqrt(real_alpha ** 2 + real_beta ** 2)
+    
+    # we can rewrite alpha and beta as 
+    # alpha = a*e^(ix)
+    # beta = b*e^(iy)
+    # with a, b, x and y being real numbers
+    # then the equation would be 
+    # q0 = a*e^(ix)* 0 + b*e^(iy)* 1
+    #    = e^(ix)(a*0 +  b*e^(i(y-x))*1)
+    # which we know to be equal to a = cos(θ/2) and b=sin(θ/2), and e^(i(y-x)) = e^(i(Φ))
+    # so by finding x and y, we find Φ
+    phase_alpha = np.angle(coef0)
+    phase_beta = np.angle(coef1)
+    Φ = (phase_beta - phase_alpha)
+    
+    # the next step is to find θ
+    # for which we just put alpha = cos(θ/2)
+    θ = 2* np.arccos(real_alpha)
+    
+    # formulas to get coordinates from angles (trigonometry)
+    z = (radius * np.cos(θ))
+    x = (radius * np.sin(θ) * np.cos(Φ))
+    y = (radius * np.sin(θ) * np.sin(Φ))
